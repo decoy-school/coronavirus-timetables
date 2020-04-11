@@ -1,6 +1,8 @@
 <script>
   import { Auth, GoogleProvider, DB } from "./firebase.js";
   import { onMount } from "svelte";
+  import SignInButton from "./SignInButton.svelte";
+  import SignOutButton from "./SignOutButton.svelte";
 
   const authorizedUsers = [
     "sball@decoyschool.co.uk",
@@ -17,29 +19,26 @@
   $: docs = [];
   $: user = null;
 
-  onMount(() => {});
-
-  const signIn = () => {
-    Auth.signInWithPopup(GoogleProvider)
-      .then()
-      .catch(err => console.error(err)); // better error handling here!
-  };
-
   Auth.onAuthStateChanged(usr => {
-    user = usr;
     // if there's no user (i.e. this is a signout)
-    if (!user) {
+    if (!usr) {
+      user = null;
       docs = [];
       return;
     }
-    if (user) {
-      if (authorizedUsers.includes(user.email)) {
+    // if there is a user (i.e. this is a signin)
+    if (usr) {
+      // is this a user in the list above?
+      if (authorizedUsers.includes(usr.email)) {
+        user = usr;
         DB.collection("key-workers-2020-04-13").onSnapshot(snapshot => {
           snapshot.forEach(doc => {
             docs = [...docs, doc.data()];
           });
         });
+        // if not in the list above, sign them out.
       } else {
+        user = null;
         console.log("sorry, that's not a valid user account");
         Auth.signOut();
         docs = [];
@@ -47,12 +46,20 @@
     }
   });
 
+  $: keys = docs.map(doc => Object.keys(doc));
+
+  // helper function for displaying with <pre>s
   const formatData = obj => JSON.stringify(obj, null, 2);
 </script>
 
 {#if user}
-  <button on:click={() => Auth.signOut()}>Sign out</button>
-  <pre>{formatData(docs)}</pre>
+  <SignOutButton />
+  <pre>{keys}</pre>
+  {#each keys as key}
+    {#each key as k}
+      <p>{k}</p>
+    {/each}
+  {/each}
 {:else}
-  <button on:click={signIn}>Sign in</button>
+  <SignInButton />
 {/if}
