@@ -1,6 +1,7 @@
 <script>
-  import { Auth, GoogleProvider, DB } from "./firebase.js";
+  import { Auth, DB } from "./firebase.js";
   import { onMount } from "svelte";
+  import { User, Docs, ParsedDays, Dates } from "./store.js";
   import SignInButton from "./SignInButton.svelte";
   import SignOutButton from "./SignOutButton.svelte";
 
@@ -16,50 +17,56 @@
     "dohalloran@decoyschool.co.uk"
   ];
 
-  $: docs = [];
-  $: user = null;
+  // HELPER FUNCTIONS
+  // helper function for displaying with raw data
+  const formatData = obj => JSON.stringify(obj, null, 2);
+  // helper function to delete a record from firestore DB
+  const deleteRecord = id => {
+    DB.collection("key-workers-2020-04-13")
+      .doc(id)
+      .delete()
+      .then(() => console.log(`deleted record with id: ${id}`))
+      .catch(err => console.error(`error: ${err}`));
+  };
 
+  // AUTH STATE
   Auth.onAuthStateChanged(usr => {
     // if there's no user (i.e. this is a signout)
     if (!usr) {
-      user = null;
-      docs = [];
+      User.set(null);
+      Docs.set([]);
       return;
     }
-    // if there is a user (i.e. this is a signin)
+    // if there is a User (i.e. this is a signin)
     if (usr) {
-      // is this a user in the list above?
+      // is this a User in the list above?
       if (authorizedUsers.includes(usr.email)) {
-        user = usr;
+        User.set(usr);
         DB.collection("key-workers-2020-04-13").onSnapshot(snapshot => {
           snapshot.forEach(doc => {
-            docs = [...docs, doc.data()];
+            Docs.set([...$Docs, doc.data()]);
           });
         });
         // if not in the list above, sign them out.
       } else {
-        user = null;
-        console.log("sorry, that's not a valid user account");
+        User.set(null);
+        console.log("sorry, that's not a valid User account");
         Auth.signOut();
-        docs = [];
+        Docs.set([]);
       }
     }
   });
-
-  $: keys = docs.map(doc => Object.keys(doc));
-
-  // helper function for displaying with <pre>s
-  const formatData = obj => JSON.stringify(obj, null, 2);
 </script>
 
-{#if user}
+{#if $User}
   <SignOutButton />
-  <pre>{keys}</pre>
-  {#each keys as key}
-    {#each key as k}
-      <p>{k}</p>
-    {/each}
-  {/each}
+
+  <h2>Raw Data</h2>
+  <h3>Parsed</h3>
+  <p>{$Dates}</p>
+  <pre>{formatData($ParsedDays)}</pre>
+  <h3>Unparsed</h3>
+  <pre>{formatData($Docs)}</pre>
 {:else}
   <SignInButton />
 {/if}
