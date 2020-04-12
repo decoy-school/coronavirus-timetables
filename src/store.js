@@ -2,6 +2,8 @@ import { writable, derived } from "svelte/store";
 
 export const User = writable(null);
 export const Docs = writable([]);
+export const Mode = writable("kw");
+
 export const ParsedDays = derived(Docs, ($Docs) => {
   // DATA CLEANING AND PARSING
   let parsedDays = {};

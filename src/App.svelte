@@ -1,9 +1,10 @@
 <script>
   import { Auth, DB } from "./firebase.js";
-  import { slide, fade } from "svelte/transition";
-  import { User, Docs, ParsedDays, Dates } from "./store.js";
+  import { slide, fade, fly } from "svelte/transition";
+  import { User, Docs, Mode, ParsedDays, Dates } from "./store.js";
   import SignInView from "./SignInView.svelte";
   import SignOutButton from "./SignOutButton.svelte";
+  import ModeSwitchButtons from "./ModeSwitchButtons.svelte";
   import DayTimetable from "./DayTimetable.svelte";
 
   const authorizedUsers = [
@@ -79,13 +80,30 @@
     <div transition:fade id="timetable-container">
       <header>
         <h1>Decoy School Timetables</h1>
-        <SignOutButton />
+        <div id="buttons">
+          <ModeSwitchButtons />
+          <SignOutButton />
+        </div>
       </header>
-      <div id="key-workers-container">
-        {#each $Dates as date}
-          <DayTimetable {date} data={$ParsedDays[date]} />
-        {/each}
-      </div>
+      {#if $Mode == 'kw'}
+        <div
+          in:fly={{ delay: 500, x: -1000 }}
+          out:fly={{ x: 1000 }}
+          id="key-workers-container">
+          <h2>Timetable for Children of Key Workers</h2>
+          {#each $Dates as date}
+            <DayTimetable {date} data={$ParsedDays[date]} />
+          {/each}
+        </div>
+      {:else}
+        <div
+          in:fly={{ delay: 500, x: -1000 }}
+          out:fly={{ x: 1000 }}
+          id="staff-container">
+          <h2>Staff Availability Timetable</h2>
+          <p>Work in progress!</p>
+        </div>
+      {/if}
     </div>
   {:else}
     <div transition:fade id="sign-in-container">
