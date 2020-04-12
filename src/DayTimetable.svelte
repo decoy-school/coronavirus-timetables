@@ -71,6 +71,11 @@
   tr:nth-child(even) {
     background-color: #e9f4ff;
   }
+  tr.totals {
+    background: papayawhip;
+    font-weight: 700;
+    font-size: 1.1em;
+  }
   td ul {
     padding: 0;
     list-style-type: none;
@@ -187,6 +192,13 @@
         <td>{data['AM']['Year 6']}</td>
         <td>{data['PM']['Year 6']}</td>
         <td>{data['After School Club']['Year 6']}</td>
+      </tr>
+      <tr class="totals">
+        <td>Totals</td>
+        <td>{data['Breakfast Club'].names.length}</td>
+        <td>{data['AM'].names.length}</td>
+        <td>{data['PM'].names.length}</td>
+        <td>{data['After School Club'].names.length}</td>
       </tr>
     </table>
     <p>School meals: {data['school-meals']}</p>

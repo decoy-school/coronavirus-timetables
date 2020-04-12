@@ -1,7 +1,14 @@
 <script>
   import { Auth, DB } from "./firebase.js";
   import { slide, fade, fly } from "svelte/transition";
-  import { User, Docs, Mode, ParsedDays, Dates } from "./store.js";
+  import {
+    User,
+    IsInvalidUser,
+    Docs,
+    Mode,
+    ParsedDays,
+    Dates
+  } from "./store.js";
   import SignInView from "./SignInView.svelte";
   import SignOutButton from "./SignOutButton.svelte";
   import ModeSwitchButtons from "./ModeSwitchButtons.svelte";
@@ -44,6 +51,7 @@
       // is this a User in the list above?
       if (authorizedUsers.includes(usr.email)) {
         User.set(usr);
+        IsInvalidUser.set(false);
         DB.collection("key-workers-2020-04-13").onSnapshot(snapshot => {
           Docs.set([]);
           snapshot.forEach(doc => {
@@ -53,6 +61,7 @@
         // if not in the list above, sign them out.
       } else {
         User.set(null);
+        IsInvalidUser.set(true);
         console.log("sorry, that's not a valid User account");
         Auth.signOut();
         Docs.set([]);

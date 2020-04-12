@@ -1,5 +1,8 @@
 <script>
+  import { fade } from "svelte/transition";
   import { Auth, GoogleProvider } from "./firebase.js";
+  import { IsInvalidUser } from "./store.js";
+
   let isLoading = false;
   const signIn = () => {
     isLoading = true;
@@ -22,7 +25,7 @@
   }
 
   button {
-    margin-top: 0.3em;
+    margin: 0.3em;
     padding: 10px 1em;
     font-size: 1.3em;
     width: 200px;
@@ -40,6 +43,10 @@
     background-color: lightgrey;
   }
 
+  button:disabled:hover {
+    background-color: lightgrey;
+  }
+
   button:hover {
     background-color: #135a9f;
   }
@@ -54,4 +61,9 @@
   <button disabled={isLoading} on:click={signIn}>
     {isLoading ? 'Loading...' : 'Sign In'}
   </button>
+  {#if $IsInvalidUser}
+    <p transition:fade style={'color: orangered'}>
+      Sorry, that's not a valid user account.
+    </p>
+  {/if}
 </div>

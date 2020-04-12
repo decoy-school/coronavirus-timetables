@@ -1,6 +1,7 @@
 import { writable, derived } from "svelte/store";
 
 export const User = writable(null);
+export const IsInvalidUser = writable(false);
 export const Docs = writable([]);
 export const Mode = writable("kw");
 
