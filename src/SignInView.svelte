@@ -18,7 +18,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vw;
+    height: 100vh;
   }
 
   button {
