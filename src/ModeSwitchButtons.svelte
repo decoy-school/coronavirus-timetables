@@ -12,21 +12,16 @@
     font-weight: 700;
     font-family: "Open Sans", sans-serif;
     border: none;
+    border-bottom: 2px solid white;
     outline: none;
-    border-radius: 10px;
     transition: all 0.33s ease;
   }
 
   button.active {
-    color: lightgrey;
+    border-color: #1e90ff;
   }
   button:hover {
-    background-color: #135a9f;
-    color: white;
-  }
-  button.active:hover {
-    color: lightgrey;
-    background: white;
+    color: #135a9f;
   }
 </style>
 

@@ -73,17 +73,22 @@
     align-items: center;
     justify-content: space-between;
   }
+  #controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 </style>
 
 <div id="app-container">
   {#if $User}
     <div transition:fade id="timetable-container">
       <header>
-        <h1>Decoy School Timetables</h1>
-        <div id="buttons">
+        <div id="controls">
+          <h1>Decoy School Timetables</h1>
           <ModeSwitchButtons />
-          <SignOutButton />
         </div>
+        <SignOutButton />
       </header>
       {#if $Mode == 'kw'}
         <div
