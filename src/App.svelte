@@ -4,6 +4,7 @@
   import { User, Docs, ParsedDays, Dates } from "./store.js";
   import SignInButton from "./SignInButton.svelte";
   import SignOutButton from "./SignOutButton.svelte";
+  import DayTimetable from "./DayTimetable.svelte";
 
   const authorizedUsers = [
     "sball@decoyschool.co.uk",
@@ -59,14 +60,13 @@
 </script>
 
 {#if $User}
-  <SignOutButton />
-
-  <h2>Raw Data</h2>
-  <h3>Parsed</h3>
-  <p>{$Dates}</p>
-  <pre>{formatData($ParsedDays)}</pre>
-  <h3>Unparsed</h3>
-  <pre>{formatData($Docs)}</pre>
+  <header>
+    <h1>Decoy School Key Worker Timetable</h1>
+    <SignOutButton />
+  </header>
+  {#each $Dates as date}
+    <DayTimetable {date} data={$ParsedDays[date]} />
+  {/each}
 {:else}
   <SignInButton />
 {/if}

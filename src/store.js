@@ -100,5 +100,5 @@ export const ParsedDays = derived(Docs, ($Docs) => {
 
 export const Dates = derived(
   ParsedDays,
-  ($ParsedDays) => Object.keys($ParsedDays) || null
+  ($ParsedDays) => Object.keys($ParsedDays).sort() || null
 );
