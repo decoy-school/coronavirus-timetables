@@ -57,6 +57,7 @@
 </style>
 
 <div>
+  <h1>Decoy School Coronavirus Timetables</h1>
   <p>You are not signed in.</p>
   <button disabled={isLoading} on:click={signIn}>
     {isLoading ? 'Loading...' : 'Sign In'}
