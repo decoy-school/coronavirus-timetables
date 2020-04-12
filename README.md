@@ -6,8 +6,10 @@ Simple webapp to parse data from Google sheets to display staff availabilty by d
 
 To do:
 
-- work out how to pull all existing data from spreadsheet
-- decide how to parse and display data - by day?
+- ~~work out how to pull all existing data from spreadsheet~~
+- ~~decide how to parse and display data - by day?~~
+- look at bug were updates are appended to an array rather than re-writing it
+- deploy to netlify
 - styling (BASIC!)
 - loading/async states (BASIC!)
 - think about workflow for adding upcoming weeks

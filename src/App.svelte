@@ -1,8 +1,8 @@
 <script>
   import { Auth, DB } from "./firebase.js";
-  import { onMount } from "svelte";
+  import { slide, fade } from "svelte/transition";
   import { User, Docs, ParsedDays, Dates } from "./store.js";
-  import SignInButton from "./SignInButton.svelte";
+  import SignInView from "./SignInView.svelte";
   import SignOutButton from "./SignOutButton.svelte";
   import DayTimetable from "./DayTimetable.svelte";
 
@@ -44,6 +44,7 @@
       if (authorizedUsers.includes(usr.email)) {
         User.set(usr);
         DB.collection("key-workers-2020-04-13").onSnapshot(snapshot => {
+          Docs.set([]);
           snapshot.forEach(doc => {
             Docs.set([...$Docs, doc.data()]);
           });
@@ -59,14 +60,36 @@
   });
 </script>
 
-{#if $User}
-  <header>
-    <h1>Decoy School Key Worker Timetable</h1>
-    <SignOutButton />
-  </header>
-  {#each $Dates as date}
-    <DayTimetable {date} data={$ParsedDays[date]} />
-  {/each}
-{:else}
-  <SignInButton />
-{/if}
+<style>
+  #app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1em;
+  }
+  header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+</style>
+
+<div id="app-container">
+  {#if $User}
+    <div transition:fade id="timetable-container">
+      <header>
+        <h1>Decoy School Timetables</h1>
+        <SignOutButton />
+      </header>
+      <div id="key-workers-container">
+        {#each $Dates as date}
+          <DayTimetable {date} data={$ParsedDays[date]} />
+        {/each}
+      </div>
+    </div>
+  {:else}
+    <div transition:fade id="sign-in-container">
+      <SignInView />
+    </div>
+  {/if}
+</div>
