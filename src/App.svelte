@@ -94,7 +94,7 @@
     <div transition:fade id="timetable-container">
       <header>
         <div id="controls">
-          <h1>Decoy School Timetables</h1>
+          <h1>Decoy School Coronavirus Timetables</h1>
           <ModeSwitchButtons />
         </div>
         <SignOutButton />
